@@ -45,22 +45,6 @@ function draw() {
   ctx.save();
   ctx.translate(thing.x, thing.y); // Just use translation again
 
-  // 4. Draw some circles around it
-  var angle = 0;
-  var degreeSpacing = Math.PI * 2 / thing.deformations.length;
-  ctx.beginPath();
-
-  const defaultDeformation = 0.5;
-  for (var i = 0; i < thing.deformations.length; i++) {
-    var radius = (thing.deformations[i]) ? thing.deformations[i] : defaultDeformation;
-    radius = (thing.size * radius) + thing.size;
-    let x = radius * Math.cos(angle);
-    let y = radius * Math.sin(angle);
-    ctx.lineTo(x, y);
-    angle += degreeSpacing;
-  }
-  ctx.closePath();
-  ctx.stroke();
 
   // Undo transformations
   ctx.restore();
@@ -89,7 +73,7 @@ function behaviour() {
   // 1. Increase rotation if there's a burst of loudness compared to recent
   let diff = waveD.avg - ampWindow.avg(); // Will be positive if we're louder, negative if softer
   if (Math.abs(diff) > 0.00001 && diff > 0) { // Only move if there's enough of a difference & it's louder
-    thing.rotationVector += diff;
+    thing.size += diff *5;
   }
 
   // 2. Deform the body based on averaging of FFT bins

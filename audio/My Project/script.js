@@ -38,20 +38,20 @@ function draw() {
     ball.vx = -ball.vx;
   }
 
-  raf = window.requestAnimationFrame(draw);
+ // raf = window.requestAnimationFrame(draw);
 }
 
 
-canvas.addEventListener('mouseover', function(e) {
+/*canvas.addEventListener('mouseover', function(e) {
   raf = window.requestAnimationFrame(draw);
 });
 
 canvas.addEventListener('mouseout', function(e) {
   window.cancelAnimationFrame(raf);
-});
+});*/
 
 
-ball.draw()
+//ball.draw()
 
 let audioCtx, analyser;
 let visualiser = null;
@@ -125,6 +125,8 @@ function onMicSuccess(stream) {
 
 function analyse() {
   const bins = analyser.frequencyBinCount;
+
+  draw();
 
   // Get frequency and amplitude data
   const freq = new Float32Array(bins);
@@ -232,10 +234,18 @@ function updateDisplay() {
     ball.color = 'black'    
   } if (freq[magicBucket] < -50) {
     ball.color = 'blue'
-  } if (freq[magicBuckets] > - 80 ){
+  }/* if (freq[magicBuckets] > - 80 ){
     ball.radius = 50;
   } else {
     ball.radius = 25;
-  }
+  }*/
+
+  var x = 1- freq[magicBucket] / -80;
+
+  if ( x < 0  ) x=0 
+  if (x > 1) x=1
+  console.log(x);
+
+  ball.radius = (100*x) +5;
 
 }
