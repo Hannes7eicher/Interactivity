@@ -2,14 +2,19 @@ var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 var raf;
 var running = true;
+var r = 135;
+var g = 50;
+var b = 255;
+var horizontal = 5;
+var vertical = 5;
 
 var ball = {
   x: 100,
   y: 100,
-  vx: 5,
-  vy: 5,
+  vx: horizontal,
+  vy: vertical,
   radius: 25,
-  color: 'rgb(254, 24, 25)',
+  color: "rgb(" +r+ ", " +g+ ", " +b+ ")",
   draw: function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
@@ -37,21 +42,10 @@ function draw() {
   if (ball.x + ball.vx > canvas.width || ball.x + ball.vx < 0) {
     ball.vx = -ball.vx;
   }
-
- // raf = window.requestAnimationFrame(draw);
 }
 
 
-/*canvas.addEventListener('mouseover', function(e) {
-  raf = window.requestAnimationFrame(draw);
-});
 
-canvas.addEventListener('mouseout', function(e) {
-  window.cancelAnimationFrame(raf);
-});*/
-
-
-//ball.draw()
 
 let audioCtx, analyser;
 let visualiser = null;
@@ -137,7 +131,7 @@ function analyse() {
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
   const magicBucket = 8;
-  const speed = 65;
+  const speed = 35;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
@@ -182,8 +176,8 @@ function analyse() {
 function updateDisplay() {
 
   const magicBucket = 8;
-  const speed = 65;
-  const magicBuckets = 17;
+  const freqOne = 35;
+  const freqTwo = 17;
   const bins = analyser.frequencyBinCount;
   const freq = new Float32Array(bins);
   const wave = new Float32Array(bins);
@@ -208,54 +202,21 @@ function updateDisplay() {
   document.getElementById('intervalMs').innerText = parseInt(currentIntervalMs) + ' ms.';
   document.getElementById('intervalBpm').innerText = currentBpm + ' bpm.';
 
-  /*if(currentBpm > 50) {
-    ball.color = 'red'
-  } 
-  if (currentBpm > 100) {
-    ball.color = 'yellow'
-  } else {
-    ball.color = 'green'
-  }
-
-  if (currentIntervalMs > 500) {
-    ball.radius = 55;
-  } if (currentIntervalMs < 550) {
-    ball.radius = 25;
-  } if (currentIntervalMs == 10) {
-    ball.radius = 25;
-  }*/
-
-
-  /*if (currentBpm > 100) {
-    raf = window.requestAnimationFrame(draw);
-  } else {
-    window.cancelAnimationFrame(raf);
-  } */
-
- /* if (freq[magicBucket] > -50) {
-    ball.color = 'black'    
-  } if (freq[magicBucket] < -50) {
-    ball.color = 'blue'
-  } if (freq[magicBuckets] > - 80 ){
-    ball.radius = 50;
-  } else {
-    ball.radius = 25;
-  }*/
-
   var x = 1- freq[magicBucket] / -80;
-  var y = 1- freq[speed] / -100;
+  var y = 1- freq[freqOne]  -80;
+
 
   if ( x < 0  ) x=0
   if (x > 1) x=1
   //console.log(x);
 
-  ball.radius = (100 * x) +1;
+  //ball.radius = (100 * x) +1;
+  //r = ( 300 * x );
+  g = ( 300 * x );
+  b = ( 300 * x );
+  ball.color = "rgb(" +r+ ", " +g+ ", " +b+ ")"
 
-  if ( y < 0  ) y=0
-  if (y > 1) y=1
-  console.log(y);
+ 
+console.log(vertical);
 
- // if (speed > -70){
-//ball.color = 'rgba(15, 240 , 25, 1)'
-//  } else {'rgba(5, 24, 25, 0.3)'}
 }
