@@ -177,7 +177,6 @@ function updateDisplay() {
 
   const magicBucket = 8;
   const freqOne = 35;
-  const freqTwo = 17;
   const bins = analyser.frequencyBinCount;
   const freq = new Float32Array(bins);
   const wave = new Float32Array(bins);
@@ -211,12 +210,19 @@ function updateDisplay() {
   //console.log(x);
 
   //ball.radius = (100 * x) +1;
-  //r = ( 300 * x );
+ /* r = ( 300 * x );
   g = ( 300 * x );
   b = ( 300 * x );
-  ball.color = "rgb(" +r+ ", " +g+ ", " +b+ ")"
+  ball.color = "rgb(" +r+ ", " +g+ ", " +b+ ")"'*/
+  
+  
+ /* ball.vy = (x*50) + 1;
+  ball.vx = (x*50) + 1;
+
+  if (ball.vy < 5) ball.vy = 5;
+  if (ball.vx < 5) ball.vx = 5;*/
 
  
-console.log(vertical);
+console.log(ball.vx);
 
 }
