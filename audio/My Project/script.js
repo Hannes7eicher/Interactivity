@@ -9,7 +9,7 @@ var ball = {
   vx: 5,
   vy: 5,
   radius: 25,
-  color: 'blue',
+  color: 'rgb(254, 24, 25)',
   draw: function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
@@ -137,6 +137,7 @@ function analyse() {
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
   const magicBucket = 8;
+  const speed = 65;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
@@ -181,6 +182,7 @@ function analyse() {
 function updateDisplay() {
 
   const magicBucket = 8;
+  const speed = 65;
   const magicBuckets = 17;
   const bins = analyser.frequencyBinCount;
   const freq = new Float32Array(bins);
@@ -230,22 +232,30 @@ function updateDisplay() {
     window.cancelAnimationFrame(raf);
   } */
 
-  if (freq[magicBucket] > -50) {
+ /* if (freq[magicBucket] > -50) {
     ball.color = 'black'    
   } if (freq[magicBucket] < -50) {
     ball.color = 'blue'
-  }/* if (freq[magicBuckets] > - 80 ){
+  } if (freq[magicBuckets] > - 80 ){
     ball.radius = 50;
   } else {
     ball.radius = 25;
   }*/
 
   var x = 1- freq[magicBucket] / -80;
+  var y = 1- freq[speed] / -100;
 
-  if ( x < 0  ) x=0 
+  if ( x < 0  ) x=0
   if (x > 1) x=1
-  console.log(x);
+  //console.log(x);
 
-  ball.radius = (100*x) +5;
+  ball.radius = (100 * x) +1;
 
+  if ( y < 0  ) y=0
+  if (y > 1) y=1
+  console.log(y);
+
+ // if (speed > -70){
+//ball.color = 'rgba(15, 240 , 25, 1)'
+//  } else {'rgba(5, 24, 25, 0.3)'}
 }
