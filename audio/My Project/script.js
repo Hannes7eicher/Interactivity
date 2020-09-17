@@ -4,14 +4,12 @@ var running = true;
 var r = 135;
 var g = 50;
 var b = 255;
-var horizontal = 5;
-var vertical = 5;
 
 var ball = {
   x: 100,
   y: 100,
-  vx: horizontal,
-  vy: vertical,
+  vx: 5,
+  vy: 5,
   radius: 25,
   color: "rgb(" +r+ ", " +g+ ", " +b+ ")",
   draw: function() {
@@ -130,7 +128,7 @@ function analyse() {
 
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
-  const magicBucket = 27;
+  const magicBucket = 8;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
@@ -202,10 +200,40 @@ function updateDisplay() {
 
   var col = 1- freq[magicBucketOne] / -80;
   var rad = 1- freq[magicBucketTwo] / -80;
+  
+  
+  
+  
+  // KOMMENTIER MICH!
+  var velocityX = ball.vx;
+  var velocityY = ball.vy;
+  
+  var maxVelocity = 50;
+  
+  if ( ball.vx < 0 ) {
+    velocityX = ball.vx * -1
+  } 
+
+  console.log("Velocity " + velocityX);
+
+  if (velocityX > maxVelocity) {
+    if (ball.vx < 0){
+      ball.vx = -maxVelocity;
+    }
+    else {
+      ball.vx = maxVelocity;
+    }
+    if (ball.vy < 0){
+      ball.vy = -maxVelocity;
+    }
+    else {
+      ball.vy = maxVelocity;
+    }
+  }
 
 
-  if ( rad < 0  ) rad=0
-  if (rad > 1) rad=1
+  if ( rad < 0 ) rad=0
+  if ( rad > 1 ) rad=1
 
   ball.radius = (100 * rad) +1;
   if (ball.radius < 21) ball.radius = 25;
@@ -224,21 +252,21 @@ function updateDisplay() {
  
 
  if (currentBpm > 100) {
-   ball.vx =+ ball.vx *1.2 ; 
-   ball.vy =+ ball.vy *1.2;
- } if (currentBpm < 100) {
-  ball.vx =+ ball.vx /1.1 ; 
-  ball.vy =+ ball.vy /1.1;
-} if (currentBpm < 50) {
+   ball.vx = ball.vx *1.2 ; 
+   ball.vy = ball.vy *1.2;
+
+
+ } 
+ /*if (currentBpm < 10) {
   ball.vx = ball.vx ; 
   ball.vy = ball.vy ;
+} 
+*/if (currentBpm < 100) {
+  ball.vx = ball.vx /1.1 ; 
+  ball.vy = ball.vy /1.1;
 }
 
- /*if (0 < horizontal < 1) horizontal=1;
- if (0 > -horizontal < -5 ) -horizontal = 1;
 
- if (0 < vertical < 1) vertical=1;
- if (0 > -vertical < -5 ) vertical=-1;*/
- console.log(freq[magicBucketTwo])
+ console.log(ball.vx + "X");
+ console.log(ball.vy + "Y");
 }
-
