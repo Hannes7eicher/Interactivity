@@ -1,6 +1,5 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
-var raf;
 var running = true;
 var r = 135;
 var g = 50;
@@ -131,12 +130,11 @@ function analyse() {
 
   // In testing, with FFT size of 32, bucket #19 correspnds with metronome
   // ...but probably not your sound.
-  const magicBucket = 8;
-  const speed = 35;
+  const magicBucket = 27;
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
-  let hit = (freq[magicBucket] > -40);
+  let hit = (freq[magicBucket] > -60);
 
   // An alternative approach is to check for a peak, regardless of freq
   // let hit = thresholdPeak(wave, 0.004);
@@ -176,8 +174,8 @@ function analyse() {
 // Sets background colour and prints out interval info
 function updateDisplay() {
 
-  const magicBucketOne = 76;
-  const freqOne = 35;
+  const magicBucketOne = 38;
+  const magicBucketTwo = 1;
   const bins = analyser.frequencyBinCount;
   const freq = new Float32Array(bins);
   const wave = new Float32Array(bins);
@@ -202,18 +200,18 @@ function updateDisplay() {
   document.getElementById('intervalMs').innerText = parseInt(currentIntervalMs) + ' ms.';
   document.getElementById('intervalBpm').innerText = currentBpm + ' bpm.';
 
-  var col = 1- freq[magicBucketOne] / -100;
-  var y = 1- freq[freqOne]  -80;
+  var col = 1- freq[magicBucketOne] / -80;
+  var rad = 1- freq[magicBucketTwo] / -80;
 
 
-  if ( col < 0  ) col=0
-  if (col > 1) col=1
-  //console.log(x);
+  if ( rad < 0  ) rad=0
+  if (rad > 1) rad=1
 
-  //ball.radius = (100 * x) +1;
-  r = ( 300 * col );
-  g = ( 300 * col );
-  b = ( 300 * col );
+  ball.radius = (100 * rad) +1;
+  if (ball.radius < 21) ball.radius = 25;
+  r = ( 176.4 * col );
+  g = ( 304.6 * col );
+  b = ( 83.2 * col );
   ball.color = "rgb(" +r+ ", " +g+ ", " +b+ ")"
   
   
@@ -231,9 +229,9 @@ function updateDisplay() {
  } if (currentBpm < 100) {
   ball.vx =+ ball.vx /1.1 ; 
   ball.vy =+ ball.vy /1.1;
-} if (currentBpm < 1) {
-  ball.vx =+ ball.vx *1; 
-  ball.vy =+ ball.vy *1;
+} if (currentBpm < 50) {
+  ball.vx = ball.vx ; 
+  ball.vy = ball.vy ;
 }
 
  /*if (0 < horizontal < 1) horizontal=1;
@@ -241,6 +239,6 @@ function updateDisplay() {
 
  if (0 < vertical < 1) vertical=1;
  if (0 > -vertical < -5 ) vertical=-1;*/
- console.log(currentBpm)
+ console.log(freq[magicBucketTwo])
 }
 
