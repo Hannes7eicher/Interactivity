@@ -26,7 +26,7 @@ var ball = {
 
 
 function clear() {
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 1)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 }
 
@@ -42,6 +42,7 @@ function draw() {
   if (ball.x + ball.vx > canvas.width || ball.x + ball.vx < 0) {
     ball.vx = -ball.vx;
   }
+
 }
 
 
@@ -135,7 +136,7 @@ function analyse() {
 
   // Determine pulse if frequency threshold is exceeded.
   // -60 was determined empirically, you'll need to find your own threshold
-  let hit = (freq[magicBucket] > -60);
+  let hit = (freq[magicBucket] > -40);
 
   // An alternative approach is to check for a peak, regardless of freq
   // let hit = thresholdPeak(wave, 0.004);
@@ -175,7 +176,7 @@ function analyse() {
 // Sets background colour and prints out interval info
 function updateDisplay() {
 
-  const magicBucket = 8;
+  const magicBucketOne = 76;
   const freqOne = 35;
   const bins = analyser.frequencyBinCount;
   const freq = new Float32Array(bins);
@@ -201,28 +202,45 @@ function updateDisplay() {
   document.getElementById('intervalMs').innerText = parseInt(currentIntervalMs) + ' ms.';
   document.getElementById('intervalBpm').innerText = currentBpm + ' bpm.';
 
-  var x = 1- freq[magicBucket] / -80;
+  var col = 1- freq[magicBucketOne] / -100;
   var y = 1- freq[freqOne]  -80;
 
 
-  if ( x < 0  ) x=0
-  if (x > 1) x=1
+  if ( col < 0  ) col=0
+  if (col > 1) col=1
   //console.log(x);
 
   //ball.radius = (100 * x) +1;
- /* r = ( 300 * x );
-  g = ( 300 * x );
-  b = ( 300 * x );
-  ball.color = "rgb(" +r+ ", " +g+ ", " +b+ ")"'*/
+  r = ( 300 * col );
+  g = ( 300 * col );
+  b = ( 300 * col );
+  ball.color = "rgb(" +r+ ", " +g+ ", " +b+ ")"
   
   
- /* ball.vy = (x*50) + 1;
-  ball.vx = (x*50) + 1;
+  //ball.vy = (x*30) + 1;
+  //ball.vx = (x*30) + 1;
 
-  if (ball.vy < 5) ball.vy = 5;
-  if (ball.vx < 5) ball.vx = 5;*/
+  // if (ball.vy < 5) ball.vy = 5;
+  // if (ball.vx < 5) ball.vx = 5;
 
  
-console.log(ball.vx);
 
+ if (currentBpm > 100) {
+   ball.vx =+ ball.vx *1.2 ; 
+   ball.vy =+ ball.vy *1.2;
+ } if (currentBpm < 100) {
+  ball.vx =+ ball.vx /1.1 ; 
+  ball.vy =+ ball.vy /1.1;
+} if (currentBpm < 1) {
+  ball.vx =+ ball.vx *1; 
+  ball.vy =+ ball.vy *1;
 }
+
+ /*if (0 < horizontal < 1) horizontal=1;
+ if (0 > -horizontal < -5 ) -horizontal = 1;
+
+ if (0 < vertical < 1) vertical=1;
+ if (0 > -vertical < -5 ) vertical=-1;*/
+ console.log(currentBpm)
+}
+

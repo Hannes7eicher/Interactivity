@@ -21,7 +21,7 @@ var ball = {
 
 
 function clear() {
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.fillStyle = 'rgba(255, 255, 255, 1)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 }
 
@@ -40,14 +40,6 @@ function draw() {
 
   raf = window.requestAnimationFrame(draw);
 }
-
-
-canvas.addEventListener('click', function(e) {
-  if (!running) {
-    raf = window.requestAnimationFrame(draw);
-    running = true;
-  }
-});
 
 
 
@@ -195,9 +187,10 @@ function updateDisplay() {
   document.getElementById('intervalMs').innerText = parseInt(currentIntervalMs) + ' ms.';
   document.getElementById('intervalBpm').innerText = currentBpm + ' bpm.';
 
+  
   if (currentBpm > 100) {
     raf = window.requestAnimationFrame(draw);
   } if (currentBpm < 100) {
-    window.cancelAnimationFrame(raf);
+   window.cancelAnimationFrame(raf);
   }
 }
